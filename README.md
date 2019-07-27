@@ -32,6 +32,7 @@ For more info about a commercial license, [visit their official website](https:/
 * [Pollen stations](#-pollen-stations)
 * [Frequently Asked Questions (FAQ)](#-frequently-asked-questions-faq)
     * [What is this `Tightenco\Collect\Support\Collection` class and how does it work?](#what-is-this-tightencocollectsupportcollection-class-and-how-does-it-work)
+* [Donating to Astma-Allergi Denmark](#-donating-to-astma-allergi-denmark)
 * [License](#-license)
 
 ## 📦 Installation
@@ -88,7 +89,7 @@ get(string $stationCode);
 ```
 
 | Parameter | Type | Description |
-| :--- | :--- | :---: | :--- |
+| :--- | :--- | :--- |
 | `$stationCode` | `string` | Code of station. [Supported pollen stations.](#-pollen-stations) |
 
 _**Note**: The returned data shows the measured pollen between 13:00 (1:00 PM) yesterday and 13:00 (1:00 PM) present day. The measurements are updated everyday at 16:00 (4:00 PM)._
@@ -110,6 +111,11 @@ All data is returned within a `Tightenco\Collect\Support\Collection` class. The 
 
 Please refer to [Laravel](https://laravel.com)'s detailed documentation, to learn more about how you work with a `Collection`:<br>
 [https://laravel.com/docs/master/collections](https://laravel.com/docs/master/collections)
+
+## 💰 Donating to Astma-Allergi Denmark
+
+To help Astma-Allergi Denmark maintain and further develop the Pollen measurement service.<br>
+Please consider [sending them a donation](https://www.astma-allergi.dk/stoetos).
 
 ## 🚓 License
 This package is licensed under a [Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/).
