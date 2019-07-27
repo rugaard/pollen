@@ -1,0 +1,67 @@
+{
+  "name": "rugaard/pollen",
+  "type": "library",
+  "description": "Fetch latest Pollen measurements from Astma-Allergi Denmark.",
+  "keywords": [
+    "morten",
+    "rugaard",
+    "morten rugaard",
+    "pollen",
+    "measurements",
+    "pollen measurements",
+    "hay fever",
+    "allergic hay fever",
+    "asthma",
+    "allergies"
+  ],
+  "authors": [
+    {
+      "name": "Morten Rugaard",
+      "email": "morten@rugaard.me",
+      "homepage": "https://github.com/rugaard",
+      "role": "Developer"
+    }
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/rugaard",
+  "support": {
+    "issues": "https://github.com/rugaard/pollen/issues",
+    "source": "https://github.com/rugaard/pollen"
+  },
+  "require": {
+    "php": "^7.2",
+    "ext-json": "*",
+    "guzzlehttp/guzzle": "~6.0",
+    "tightenco/collect": "^5.8"
+  },
+  "require-dev": {
+    "mockery/mockery": "^1.0",
+    "phpunit/phpunit": "^8.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Rugaard\\Pollen\\": "src"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Rugaard\\Pollen\\Tests\\": "tests"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Rugaard\\Pollen\\Providers\\Laravel\\ServiceProvider"
+      ]
+    }
+  },
+  "scripts": {
+    "test": "./vendor/bin/phpunit --colors=always"
+  },
+  "prefer-stable": true,
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist",
+    "sort-packages": true
+  }
+}
