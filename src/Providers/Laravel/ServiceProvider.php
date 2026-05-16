@@ -7,9 +7,7 @@ use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
 use Rugaard\Pollen\Pollen;
 
 /**
- * Class ServiceProvider
- *
- * @package Rugaard\DMI\Providers\Laravel
+ * Class ServiceProvider.
  */
 class ServiceProvider extends IlluminateServiceProvider
 {
@@ -20,13 +18,8 @@ class ServiceProvider extends IlluminateServiceProvider
      */
     public function register() : void
     {
-        $this->app->singleton('rugaard.pollen', function ($app) {
-            return new Pollen;
-        });
-
-        $this->app->bind(Pollen::class, function ($app) {
-            return $app['rugaard.pollen'];
-        });
+        $this->app->singleton(abstract: 'rugaard.pollen', concrete: fn () => new Pollen);
+        $this->app->alias(abstract: 'rugaard.pollen', alias: Pollen::class);
     }
     /**
      * Get the services provided by this provider.
