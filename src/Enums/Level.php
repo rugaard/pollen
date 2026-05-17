@@ -13,7 +13,6 @@ enum Level: int
     case Low = 1;
     case Moderate = 2;
     case High = 3;
-
     case VeryHigh = 4;
 
     /**
@@ -28,7 +27,7 @@ enum Level: int
             self::Low => 'low',
             self::Moderate => 'moderate',
             self::High => 'high',
-            self::VeryHigh => 'Meget højt',
+            self::VeryHigh => 'very-high',
         };
     }
 
@@ -40,10 +39,11 @@ enum Level: int
     public function danishName(): string
     {
         return match ($this) {
-            self::Unknown => 'Ukendt',
+            self::Unknown => 'ukendt',
             self::Low => 'lavt',
             self::Moderate => 'moderat',
             self::High => 'højt',
+            self::VeryHigh => 'meget højt',
         };
     }
 }

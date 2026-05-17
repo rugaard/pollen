@@ -1,0 +1,197 @@
+{
+    "fields": {
+        "48": {
+            "mapValue": {
+                "fields": {
+                    "date": {"stringValue": "2024-04-01"},
+                    "extraInteger": {"integerValue": "42"},
+                    "extraDouble": {"doubleValue": 1.5},
+                    "extraBoolean": {"booleanValue": true},
+                    "extraNull": {"nullValue": null},
+                    "extraTimestamp": {"timestampValue": "2024-04-01T00:00:00Z"},
+                    "extraArray": {
+                        "arrayValue": {
+                            "values": [
+                                {"stringValue": "a"},
+                                {"stringValue": "b"}
+                            ]
+                        }
+                    },
+                    "data": {
+                        "mapValue": {
+                            "fields": {
+                                "1": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "0"},
+                                            "overrides": {"arrayValue": {"values": []}},
+                                            "predictions": {"mapValue": {"fields": {}}}
+                                        }
+                                    }
+                                },
+                                "2": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "3"},
+                                            "overrides": {
+                                                "arrayValue": {
+                                                    "values": [
+                                                        {"integerValue": "1"},
+                                                        {"integerValue": "2"}
+                                                    ]
+                                                }
+                                            },
+                                            "predictions": {
+                                                "mapValue": {
+                                                    "fields": {
+                                                        "2024-04-02": {"integerValue": "1"},
+                                                        "2024-04-03": {"integerValue": "2"}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "4": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "25"},
+                                            "overrides": {
+                                                "arrayValue": {
+                                                    "values": [{"integerValue": "2"}]
+                                                }
+                                            },
+                                            "predictions": {
+                                                "mapValue": {
+                                                    "fields": {
+                                                        "2024-04-02": {"integerValue": "2"}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "7": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "200"},
+                                            "overrides": {
+                                                "arrayValue": {
+                                                    "values": [{"integerValue": "3"}]
+                                                }
+                                            },
+                                            "predictions": {
+                                                "mapValue": {
+                                                    "fields": {
+                                                        "2024-04-02": {"integerValue": "3"}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "28": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "200"},
+                                            "overrides": {
+                                                "arrayValue": {
+                                                    "values": [{"integerValue": "4"}]
+                                                }
+                                            },
+                                            "predictions": {
+                                                "mapValue": {
+                                                    "fields": {
+                                                        "2024-04-02": {"integerValue": "4"}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                "31": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": false},
+                                            "level": {"integerValue": "0"},
+                                            "overrides": {"arrayValue": {"values": []}},
+                                            "predictions": {"mapValue": {"fields": {}}}
+                                        }
+                                    }
+                                },
+                                "44": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "150"},
+                                            "overrides": {"arrayValue": {"values": []}},
+                                            "predictions": {"mapValue": {"fields": {}}}
+                                        }
+                                    }
+                                },
+                                "45": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "7500"},
+                                            "overrides": {"arrayValue": {"values": []}},
+                                            "predictions": {"mapValue": {"fields": {}}}
+                                        }
+                                    }
+                                },
+                                "99": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "5"},
+                                            "overrides": {"arrayValue": {"values": []}},
+                                            "predictions": {"mapValue": {"fields": {}}}
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "49": {
+            "mapValue": {
+                "fields": {
+                    "date": {"stringValue": "2024-04-01"},
+                    "data": {
+                        "mapValue": {
+                            "fields": {
+                                "7": {
+                                    "mapValue": {
+                                        "fields": {
+                                            "inSeason": {"booleanValue": true},
+                                            "level": {"integerValue": "100"},
+                                            "overrides": {
+                                                "arrayValue": {
+                                                    "values": [{"integerValue": "2"}]
+                                                }
+                                            },
+                                            "predictions": {
+                                                "mapValue": {
+                                                    "fields": {
+                                                        "2024-04-02": {"integerValue": "2"}
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

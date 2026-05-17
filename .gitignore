@@ -4,5 +4,6 @@
 index.php
 composer.phar
 composer.lock
+.claude
 .DS_Store
 .phpunit.result.cache

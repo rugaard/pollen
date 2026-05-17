@@ -13,10 +13,10 @@ use Rugaard\Pollen\Enums\Level;
 use Rugaard\Pollen\Enums\Station;
 use Rugaard\Pollen\Exceptions\ParsingFailedException;
 use Rugaard\Pollen\Exceptions\RequestFailedException;
-use Rugaard\Pollen\Support\MeasurementTypes;
-use Rugaard\Pollen\Support\Stations;
+use Rugaard\Pollen\Support\FirestoreDecoder;
 use Throwable;
 
+use function date_parse;
 use function is_string;
 use function json_decode;
 
@@ -57,60 +57,59 @@ class Pollen
      * Get latest measurements and predictions.
      *
      * @param Station|null $station
+     * @param bool $onlyInSeason
      * @return Collection
+     * @throws ParsingFailedException
+     * @throws RequestFailedException
      */
     public function get(?Station $station = null, bool $onlyInSeason = false): Collection
     {
-        try {
-            // Request latest measurements and predictions.
-            $data = $this->request()->mapWithKeys(callback: function (array $stationData, int $stationId) use ($onlyInSeason) {
-                // Get station from station ID.
-                $station = Station::fromId(id: $stationId);
+        // Request latest measurements and predictions.
+        $data = $this->request()->mapWithKeys(callback: function (array $stationData, int $stationId) use ($onlyInSeason): array {
+            // Get station from station ID.
+            $currentStation = Station::fromId(id: $stationId);
 
-                // Parse measurements for each station.
-                $measurements = Collection::make(items: $stationData['data'] ?? [])->mapWithKeys(callback: function (array $allergenData, int $allergenId) use ($station, $stationData) {
-                    // Get Allergen from ID.
-                    $allergen = Allergen::tryFrom(value: $allergenId);
+            // Parse measurements for each station.
+            $measurements = Collection::make(items: $stationData['data'] ?? [])->mapWithKeys(callback: function (array $allergenData, int $allergenId) use ($stationData): array {
+                // Get Allergen from ID.
+                $allergen = Allergen::tryFrom(value: $allergenId);
 
-                    // If the Allergen is not found or the season is not active,
-                    // we're going to set the value to null and move on.
-                    if ($allergen === null || $allergenData['inSeason'] === false) {
-                        return [$allergen?->code() ?? $allergenId => null];
-                    }
-
-                    return [$allergen->code() => Collection::make(items: [
-                        'date' => $stationData['date'],
-                        'value' => (int) $allergenData['level'],
-                        'level' => match (true) {
-                            $allergenData['level'] <= 0 => Level::Unknown,
-                            $allergenData['level'] < $allergen->levels()['low'] => Level::Low,
-                            $allergenData['level'] < $allergen->levels()['moderate'] => Level::Moderate,
-                            $allergenData['level'] < $allergen->levels()['high'] => Level::High,
-                            default => Level::VeryHigh,
-                        },
-                        'predictions' => $allergen->type() === 'spore' ? null : Collection::make(items: $allergenData['overrides'] ?? [])->map(callback: function ($prediction, $index) use ($allergenData) {
-                            $dates = Collection::make(items: $allergenData['predictions'] ?? [])->keys()->sort()->values();
-                            return [
-                                'date' => $dates->get(key: $index),
-                                'level' => Level::from(value: (int) $prediction)
-                            ];
-                        })
-                    ])];
-                });
-
-                // Support removal of Allergens that are not in season.
-                if ($onlyInSeason) {
-                    $measurements = $measurements->filter(callback: fn ($measurement) => $measurement !== null);
+                // If the Allergen is not found or the season is not active,
+                // we're going to set the value to null and move on.
+                if ($allergen === null || $allergenData['inSeason'] === false) {
+                    return [$allergen?->code() ?? $allergenId => null];
                 }
 
-                return [$station->value => $measurements->sortKeys()];
+                return [$allergen->code() => Collection::make(items: [
+                    'date' => $stationData['date'],
+                    'value' => $allergenData['level'],
+                    'level' => match (true) {
+                        $allergenData['level'] <= 0 => Level::Unknown,
+                        $allergenData['level'] < $allergen->levels()['low'] => Level::Low,
+                        $allergenData['level'] < $allergen->levels()['moderate'] => Level::Moderate,
+                        $allergenData['level'] < $allergen->levels()['high'] => Level::High,
+                        default => Level::VeryHigh,
+                    },
+                    'predictions' => $allergen->type() === 'spore' ? null : Collection::make(items: $allergenData['overrides'] ?? [])->map(callback: function ($prediction, $index) use ($allergenData): array {
+                        $dates = Collection::make(items: $allergenData['predictions'] ?? [])->keys()->sort()->values();
+                        return [
+                            'date' => $dates->get(key: $index),
+                            'level' => Level::from(value: (int) $prediction)
+                        ];
+                    })
+                ])];
             });
 
-            // Return measurements for specific station or all stations.
-            return $station !== null ? $data->get(key: $station->value, default: Collection::make()) : $data;
-        } catch (Throwable) {
-            return Collection::make();
-        }
+            // Support removal of Allergens that are not in season.
+            if ($onlyInSeason) {
+                $measurements = $measurements->filter(callback: fn ($measurement): bool => $measurement !== null);
+            }
+
+            return [$currentStation->value => $measurements->sortKeys()];
+        });
+
+        // Return measurements for specific station or all stations.
+        return $station instanceof Station ? $data->get(key: $station->value, default: Collection::make()) : $data;
     }
 
     /**
@@ -140,47 +139,13 @@ class Pollen
                     $data = json_decode(json: $data, associative: true, flags: JSON_THROW_ON_ERROR);
                 }
 
-                return Collection::make(items: $this->decodeFirestoreFields(fields: $data['fields'] ?? []));
+                return Collection::make(items: FirestoreDecoder::decode(data: $data['fields'] ?? []));
             } catch (Throwable $e) {
-                throw new ParsingFailedException(message: 'Failed to parse response body: ' . $e->getMessage(), previous: $e);
+                throw new ParsingFailedException(message: 'Failed to parse response body: ' . $e->getMessage(), code: $e->getCode(), previous: $e);
             }
-        } catch (GuzzleException $e) {
-            throw new RequestFailedException(message: 'Failed to request pollen data: ' . $e->getMessage(), previous: $e);
+        } catch (GuzzleException $guzzleException) {
+            throw new RequestFailedException(message: 'Failed to request pollen data: ' . $guzzleException->getMessage(), code: $guzzleException->getCode(), previous: $guzzleException);
         }
-    }
-
-    /**
-     * Decode Firestore fields.
-     *
-     * @param array $fields
-     * @return array
-     * @throws Exception
-     */
-    private function decodeFirestoreFields(array $fields): array
-    {
-        return array_map(callback: fn ($value) => $this->decodeFirestoreValue(value: $value), array: $fields);
-    }
-
-    /**
-     * Decode Firestore value.
-     *
-     * @param array $value
-     * @return mixed
-     * @throws Exception
-     */
-    private function decodeFirestoreValue(array $value): mixed
-    {
-        return match (true) {
-            array_key_exists(key: 'stringValue', array: $value) => $value['stringValue'],
-            array_key_exists(key: 'integerValue', array: $value) => $value['integerValue'],
-            array_key_exists(key: 'doubleValue', array: $value) => $value['doubleValue'],
-            array_key_exists(key: 'booleanValue', array: $value) => $value['booleanValue'],
-            array_key_exists(key: 'nullValue', array: $value) => $value['nullValue'],
-            array_key_exists(key: 'timestampValue', array: $value) => $value['timestampValue'],
-            array_key_exists(key: 'arrayValue', array: $value) => array_map(callback: fn ($item) => $this->decodeFirestoreValue(value: $item), array: $value['arrayValue']['values'] ?? []),
-            array_key_exists(key: 'mapValue', array: $value) => $this->decodeFirestoreFields(fields: $value['mapValue']['fields'] ?? []),
-            default => throw new Exception(message: 'Unknown value type', code: 500),
-        };
     }
 
     /**
@@ -216,7 +181,7 @@ class Pollen
      *
      * @return GuzzleClientInterface
      */
-    public function getClient():? GuzzleClientInterface
+    public function getClient(): GuzzleClientInterface
     {
         return $this->client;
     }

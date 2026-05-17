@@ -29,7 +29,7 @@
     "source": "https://github.com/rugaard/pollen"
   },
   "require": {
-    "php": "^8.2",
+    "php": "^8.3",
     "ext-json": "*",
     "guzzlehttp/guzzle": "^7.0|^8.0",
     "illuminate/collections": "^10.0|^11.0|^12.0|^13.0",
@@ -37,7 +37,8 @@
   },
   "require-dev": {
     "mockery/mockery": "^1.0",
-    "phpunit/phpunit": "^8.0|^9.0|^10.0|^11.0|^12.0|^13.0",
+    "pestphp/pest": "^4.7",
+    "rector/rector": "^2.4",
     "symfony/var-dumper": "^7.0|^8.0"
   },
   "autoload": {
@@ -58,12 +59,16 @@
     }
   },
   "scripts": {
-    "test": "./vendor/bin/phpunit --colors=always"
+    "test": "./vendor/bin/pest --colors=always",
+    "test:coverage": "./vendor/bin/pest --coverage --colors=always"
   },
   "prefer-stable": true,
   "config": {
     "optimize-autoloader": true,
     "preferred-install": "dist",
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "pestphp/pest-plugin": true
+    }
   }
 }

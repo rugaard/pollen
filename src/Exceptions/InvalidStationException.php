@@ -6,8 +6,8 @@ namespace Rugaard\Pollen\Exceptions;
 use Exception;
 
 /**
- * Class ParsingFailedException.
+ * Class InvalidStationException.
  */
-class ParsingFailedException extends Exception
+class InvalidStationException extends Exception
 {
 }
