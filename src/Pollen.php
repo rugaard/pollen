@@ -1,9 +1,9 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Rugaard\Pollen;
 
-use Exception;
 use GuzzleHttp\Client as GuzzleClient;
 use GuzzleHttp\ClientInterface as GuzzleClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
@@ -16,7 +16,6 @@ use Rugaard\Pollen\Exceptions\RequestFailedException;
 use Rugaard\Pollen\Support\FirestoreDecoder;
 use Throwable;
 
-use function date_parse;
 use function is_string;
 use function json_decode;
 
@@ -24,8 +23,6 @@ use const JSON_THROW_ON_ERROR;
 
 /**
  * Class Pollen
- *
- * @package Rugaard\Pollen
  */
 class Pollen
 {
@@ -94,9 +91,9 @@ class Pollen
                         $dates = Collection::make(items: $allergenData['predictions'] ?? [])->keys()->sort()->values();
                         return [
                             'date' => $dates->get(key: $index),
-                            'level' => Level::from(value: (int) $prediction)
+                            'level' => Level::from(value: (int) $prediction),
                         ];
-                    })
+                    }),
                 ])];
             });
 
@@ -119,7 +116,7 @@ class Pollen
      * @throws RequestFailedException
      * @throws ParsingFailedException
      */
-    public function request() : Collection
+    public function request(): Collection
     {
         try {
             // Request latest measurements and predictions from API.
@@ -153,14 +150,14 @@ class Pollen
      *
      * @return GuzzleClient
      */
-    protected function defaultClient() : GuzzleClient
+    protected function defaultClient(): GuzzleClient
     {
         return new GuzzleClient([
             'headers' => [
                 'Accept' => 'application/json',
                 'Accept-Encoding' => 'br;q=1.0, gzip;q=0.8, *;q=0.5',
-                'User-Agent' => 'Rugaard Pollen/' . self::VERSION . ' (https://github.com/rugaard/pollen) PHP/' . PHP_VERSION
-            ]
+                'User-Agent' => 'Rugaard Pollen/' . self::VERSION . ' (https://github.com/rugaard/pollen) PHP/' . PHP_VERSION,
+            ],
         ]);
     }
 
@@ -170,7 +167,7 @@ class Pollen
      * @param GuzzleClientInterface $client
      * @return $this
      */
-    public function setClient(GuzzleClientInterface $client) : self
+    public function setClient(GuzzleClientInterface $client): self
     {
         $this->client = $client;
         return $this;

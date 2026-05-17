@@ -4,6 +4,7 @@
 index.php
 composer.phar
 composer.lock
+coverage.xml
 .claude
 .DS_Store
 .phpunit.result.cache

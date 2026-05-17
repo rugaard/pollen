@@ -1,0 +1,124 @@
+name: Coding standards
+
+on:
+  pull_request:
+    types:
+      - opened
+      - reopened
+      - synchronize
+
+concurrency:
+  group: coding-standards-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pint:
+    name: Laravel Pint (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3", "8.4", "8.5"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer files
+        run: composer validate --no-interaction
+
+      - name: Get Composer cache dir
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts --no-suggest
+
+      - name: Cache Laravel Pint
+        uses: actions/cache@v4
+        with:
+          path: /tmp/laravel-pint
+          key: ${{ runner.os }}-php${{ matrix.php }}-pint-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-pint-
+
+      - name: Verify pint.json exists
+        run: |
+          if [ ! -f pint.json ]; then
+            echo "::error file=pint.json::pint.json not found in repository root."
+            exit 1
+          fi
+
+      - name: Run Pint
+        run: vendor/bin/pint --config=pint.json --test --parallel
+
+  rector:
+    name: Rector (PHP ${{ matrix.php }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.3", "8.4", "8.5"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Validate composer files
+        run: composer validate --no-interaction
+
+      - name: Get Composer cache dir
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> "$GITHUB_OUTPUT"
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --no-interaction --no-scripts --no-suggest
+
+      - name: Cache Rector
+        uses: actions/cache@v4
+        with:
+          path: /tmp/rector
+          key: ${{ runner.os }}-php${{ matrix.php }}-rector-${{ github.run_id }}
+          restore-keys: |
+            ${{ runner.os }}-php${{ matrix.php }}-rector-
+
+      - name: Make sure Rector cache folder exists
+        run: mkdir -p /tmp/rector
+
+      - name: Verify rector.php exists
+        run: |
+          if [ ! -f rector.php ]; then
+            echo "::error file=rector.php::rector.php not found in repository root."
+            exit 1
+          fi
+
+      - name: Run Rector
+        run: vendor/bin/rector process --config=rector.php --dry-run

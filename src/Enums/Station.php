@@ -38,7 +38,7 @@ enum Station: string
      * @param int $id
      * @return self|null
      */
-    public static function tryFromId(int $id):? self
+    public static function tryFromId(int $id): ?self
     {
         try {
             return self::fromId(id: $id);

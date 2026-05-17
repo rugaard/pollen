@@ -13,10 +13,9 @@ use Rugaard\Pollen\Exceptions\ParsingFailedException;
 use Rugaard\Pollen\Exceptions\RequestFailedException;
 use Rugaard\Pollen\Pollen;
 
-
 describe(description: 'constructor and client accessors', tests: function () {
     it(description: 'creates a GuzzleClient by default when no client is given', closure: function () {
-        $pollen = new Pollen();
+        $pollen = new Pollen;
         expect(value: $pollen->getClient())->toBeInstanceOf(class: GuzzleClient::class);
     });
 
@@ -27,7 +26,7 @@ describe(description: 'constructor and client accessors', tests: function () {
     });
 
     it(description: 'setClient() stores the client and returns $this', closure: function () {
-        $pollen = new Pollen();
+        $pollen = new Pollen;
         $client = Mockery::mock(ClientInterface::class);
         $returned = $pollen->setClient($client);
         expect(value: $returned)->toBe(expected: $pollen)

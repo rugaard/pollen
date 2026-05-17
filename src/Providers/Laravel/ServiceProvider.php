@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Rugaard\Pollen\Providers\Laravel;
 
-use Override;
 use Illuminate\Support\ServiceProvider as IlluminateServiceProvider;
+use Override;
 use Rugaard\Pollen\Pollen;
 
 /**
@@ -18,7 +19,7 @@ class ServiceProvider extends IlluminateServiceProvider
      * @return void
      */
     #[Override]
-    public function register() : void
+    public function register(): void
     {
         $this->app->singleton(abstract: 'rugaard.pollen', concrete: fn (): Pollen => new Pollen);
         $this->app->alias(abstract: 'rugaard.pollen', alias: Pollen::class);
@@ -30,7 +31,7 @@ class ServiceProvider extends IlluminateServiceProvider
      * @return array<int, string>
      */
     #[Override]
-    public function provides() : array
+    public function provides(): array
     {
         return ['rugaard.pollen'];
     }

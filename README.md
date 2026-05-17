@@ -1,4 +1,4 @@
-<div align="center"><img src="https://rugaard.github.io/packages/pollen/logo.jpg"></div>
+![Food Platform](.github/banner.png)
 
 # 🇩🇰🤧 Pollen measurements from Astma-Allergi Denmark
 
@@ -9,7 +9,7 @@ Astma-Allergi Denmark does unfortunately not offer an official API for the lates
 
 This package is (in some form) a workaround for that. It fetches the latest measurements and short-term predictions directly from Astma-Allergi Denmark's data feed and turns it into structured, typed data objects.
 
-The returned data shows the measured pollen between **13:00** _(1:00 PM)_ yesterday and **13:00** _(1:00 PM)_ present day. Everyday at **16:00** _(4:00 PM)_ the latest measurements are being published.
+The returned data shows the measured pollen between **13:00 (UTC +1)** _(1:00 PM)_ yesterday and **13:00 (UTC +1)** _(1:00 PM)_ present day. Every day at **16:30 (UTC +1)** _(4:30 PM)_, at the latest, the new measurements are being published.
 
 ## ⚠️ Disclaimer
 Since Astma-Allergi Denmark is an independent union, with a very little government funding, this package is made available under a very strict license, which prohibits any use other than personal.
@@ -24,7 +24,7 @@ For more info about a commercial license, [visit their official website](https:/
 * [Installation](#-installation)
     * [Laravel](#laravel)
 * [Usage](#-usage)
-    * [Pollen Client](#pollen-client)
+    * [Pollen Client](#pollen-client)![img.png](img.png)
     * [Methods](#methods)
         * [Get measurements](#get-measurements)
     * [Return data structure](#return-data-structure)
