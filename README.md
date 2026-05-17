@@ -1,3 +1,6 @@
+> ⚠️ **Version 1.x is no longer maintained and known to be broken.**  
+> Please upgrade to [v2.0](https://github.com/rugaard/pollen/releases/tag/2.0.0).
+
 <div align="center"><img src="https://rugaard.github.io/packages/pollen/logo.jpg"></div>
 
 # 🇩🇰🤧 Pollen measurements from Astma-Allergi Denmark
