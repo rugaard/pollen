@@ -39,8 +39,8 @@ For more info about a commercial license, [visit their official website](https:/
 
 ## 🖥 Requirements
 
-* PHP **8.3** or higher
-* [GuzzleHTTP](https://github.com/guzzle/guzzle) **^7.0**
+* **PHP 8.3** or higher
+* **[GuzzleHTTP](https://github.com/guzzle/guzzle) 7.0** or higher
 
 ## 📦 Installation
 You can install the package via [Composer](https://getcomposer.org/), by using the following command:
